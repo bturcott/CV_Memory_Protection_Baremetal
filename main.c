@@ -13,8 +13,9 @@
 
 #include "main.h"
 
-#define L3_RESTRICTED_ADDRESS	0x14FFFFFF
-#define HPS_RESTRICTED_ADDRESS	0x12F81111
+#define L3_RESTRICTED_ADDRESS	0x2FFFFFF4
+#define HPS_RESTRICTED_ADDRESS	0x12F81114
+#define SHARED_ADDRESS			0x1FFFFFE4
 
 //Settings for Rule 0
 #define RULE_0_START_ADDRESS		0x0 //Base address of zero
@@ -36,6 +37,7 @@ static volatile ALT_RSTMGR_BRGMODRST_t *rstmgr = (ALT_RSTMGR_BRGMODRST_t *)(RSTM
 //Pointers to restricted memory space
 static volatile int * l3_only_pointer = (int *)(L3_RESTRICTED_ADDRESS);
 static volatile int * hps_only_pointer = (int *)(HPS_RESTRICTED_ADDRESS);
+static volatile int * shared_pointer = (int *)(HPS_RESTRICTED_ADDRESS);
 
 //Rule 0 configuration
 static volatile uint32_t rule_0_sdram_start = RULE_0_START_ADDRESS;
@@ -89,34 +91,34 @@ int main()
 	// Case 1 - write/read from a shared memory space (Base case)
 	// Case 2 - Try and write/read to a restricted memory space (FPGA to HPS)
 	// Case 3 - Try and write/read to a restricted memory space (HPS to FPGA)
-	volatile int user_input = 0;
+	*shared_pointer = 0;
 
 	printf("In order to interact with this program you must use the utilize the System Console Toolkit.\r\n");
 	printf("Change the value at address location %p via the System Console Toolkit to select a test you wish to perform.\r\n",&user_input);
 	printf("A list of options is illustrated below\r\n");
-	printf("|-----------------------------------------------------------------------------|\r\n");
+	printf("|------------------------------------------------------------------------------|\r\n");
 	printf("|Please enter a '1' at %p to try and read/write from the hps only memory space|\r\n",&user_input);
 	printf("|Please enter a '2' at %p to try and read from the L3 only memory space       |\r\n",&user_input);	
 	printf("|Please enter a '3' at %p to try and write to the L3 only memory space        |\r\n",&user_input);
-	printf("|-----------------------------------------------------------------------------|\r\n");		
+	printf("|------------------------------------------------------------------------------|\r\n");		
 	//mem_test();
 	while(1)
 	{
 		printf("Main menu\r\n");		
 		delay(1);		
-		if (user_input == 1)
+		if (*shared_pointer == 1)
 		{
 			printf("You have selected case 1 - read/write from the hps only memory space.\r\n");
 			*hps_only_pointer = 7;
 			while (user_input == 1)
 			{				
-				printf("The value %d has been written at address location %p\r\n",*hps_only_pointer,hps_only_pointer);
+				printf("The value %d exists at address location %p\r\n",*hps_only_pointer,hps_only_pointer);
 				printf("Try to update that value via System Console - a successful change will be printed out here\r\n");
 				printf("Change the value at address location %p to return the main menu.\r\n",&user_input);		
-				delay(1);
+				delay(2);
 			}
 		}
-		else if (user_input == 2)
+		else if (*shared_pointer == 2)
 		{
 			printf("You have selected case 2 - read from the L3 only memory space.\r\n");
 			printf("Please write a value to the address location %p via the System Console Toolkit.\r\n",l3_only_pointer);
@@ -125,20 +127,20 @@ int main()
 			{
 				printf("The value at memory location %p is %d.\r\n",l3_only_pointer,*l3_only_pointer);
 				printf("Change the value at address location %p to return the main menu.\r\n",&user_input);	
-				delay(1);
+				delay(2);
 			}
 		}
-		else if (user_input == 3)
+		else if (*shared_pointer == 3)
 		{
 			printf("You have selected case 3 - write to the L3 only memory space.\r\n");
 			printf("The program will now try and write a '7' to the L3 only memory space at address location %p.\r\n",l3_only_pointer);
 			*l3_only_pointer = 7;
-			while (user_input == 3)
+			while (*shared_pointer == 3)
 			{
 				printf("Please confirm the value '7' has not been written to address location %p via the System Console Toolkit.\r\n",l3_only_pointer);
 				printf("The value at memory location %p is %d.\r\n",l3_only_pointer, *l3_only_pointer);
 				printf("Change the value at address location %p to return the main menu.\r\n",&user_input);	
-				delay(1);
+				delay(2);
 			}
 			
 		}
