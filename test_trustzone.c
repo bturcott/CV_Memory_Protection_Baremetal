@@ -88,7 +88,7 @@ void tz_get_rule(unsigned int ruleno, TZ_RULE_T * rule)
 	rule->result = (data >> 13) & 0x1;
 }
 
-void tz_set_configuration(uint32_t sdram_start, uint32_t sdram_end, uint32_t port_mask)
+void tz_set_configuration(uint32_t sdram_start, uint32_t sdram_end, uint32_t port_mask, uint32_t rule_number)
 {
 	TZ_RULE_T rule;
 
@@ -106,6 +106,5 @@ void tz_set_configuration(uint32_t sdram_start, uint32_t sdram_end, uint32_t por
 	rule.valid = 1; //Sets the rule as valid
 
 	// set new rule
-	tz_set_rule(rule_count, &rule);
-	rule_count = rule_count + 1;
+	tz_set_rule(rule_number, &rule);
 }

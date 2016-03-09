@@ -27,7 +27,7 @@ MEMORY
   oc_ram (rwx) : ORIGIN = 0xffff0000, LENGTH = 64K
   /* Need to have 64bytes available before start of program, to store the mkimage header */
   /*ram (rwx) : ORIGIN = 0x100000 + 0x40, LENGTH = 1023M - 0x40*/
-  ram (rwx) : ORIGIN = 0x100000 + 0x40, LENGTH = 511M - 0x40
+  ram (rwx) : ORIGIN = 0x100000 + 0x40, LENGTH = 255M - 0x40
 }
 
 /* These force the linker to search for particular symbols from
