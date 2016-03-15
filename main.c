@@ -28,7 +28,8 @@ static volatile uint32_t rule_1_sdram_end = RULE_1_END_ADDRESS;
 static volatile uint32_t rule_1_port_mask = RULE_1_PORT_MASK;
 static volatile uint32_t rule_1_rule_number = 1;
 
-//Misc variables
+//Error handling variable
+volatile unsigned int exception_flag;
 
 int main()
 {
@@ -95,9 +96,11 @@ ALT_STATUS_CODE f2h_bridge_enable(void)
 
 void rule_test(void)
 {
+	//Reset values to zero	
 	*user_input = 0;
 	*user_data = 0;
 	*user_address = 0;
+	exception_flag = 0;
 
 	printf("\r\nMain menu.\r\n");
 	printf("Enter a '1' at address %p if you would like to read from an address.\r\n", user_input);
@@ -132,6 +135,10 @@ void read(void)
 		{		
 			read_data = (unsigned int*) *user_address; 			
 			printf("The value at address %p is %d.\r\n",read_data ,*read_data);
+			if (exception_flag != 0)
+			{
+			printf("Exception flag has been thrown due to an access request to a restricted area.\r\n");
+			}
 			break;
 		}
 	}
@@ -153,6 +160,10 @@ void write(void)
 			write_data = (unsigned int *) *user_address;
 			*write_data = *user_data; //Dereferences the pointer with the value entered
 			printf("You have written %d to location %p.\r\n", *write_data, write_data);
+			if (exception_flag != 0)
+			{
+			printf("Exception flag has been thrown due to an access request to a restricted area.\r\n");
+			}
 			break;
 		}
 	}	
