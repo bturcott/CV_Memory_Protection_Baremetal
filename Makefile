@@ -13,7 +13,7 @@ C_SRC       := $(EXAMPLE_SRC) $(HWLIBS_SRC)
 LINKER_SCRIPT := cycloneV-dk-ram-modified.ld
 
 MULTILIBFLAGS := -mcpu=cortex-a9 -mfloat-abi=softfp -mfpu=neon
-CFLAGS  := -g -O0 -Wall -Werror -std=c99 $(MULTILIBFLAGS) -I$(HWLIBS_ROOT)/include -I$(HWLIBS_ROOT)/include/$(ALT_DEVICE_FAMILY) -D$(ALT_DEVICE_FAMILY)
+CFLAGS  := -g -O0 -Wall -std=c99 $(MULTILIBFLAGS) -I$(HWLIBS_ROOT)/include -I$(HWLIBS_ROOT)/include/$(ALT_DEVICE_FAMILY) -D$(ALT_DEVICE_FAMILY)
 LDFLAGS := -T$(LINKER_SCRIPT) $(MULTILIBFLAGS)
 ASFLAGS := -march=armv7-a -mcpu=cortex-a9
 

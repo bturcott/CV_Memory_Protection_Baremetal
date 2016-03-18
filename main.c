@@ -39,7 +39,9 @@ void *__arm_vector_table = (void*)0xffff0000;
 int main()
 {
 	ALT_STATUS_CODE status = ALT_E_SUCCESS;   	
-	
+
+	//Disables the interrupts
+	disable_interrupts();
 	//Copies the exception table from SDRAM into the correct location of OCRAM
 	memcpy(__arm_vector_table, &__cs3_interrupt_vector, ARM_VECTOR_TABLE_SIZE);
 
@@ -142,7 +144,7 @@ void read(void)
 		if(*user_address != 0)
 		{		
 			read_data = (unsigned int*) *user_address; 			
-			printf("The value at address %p is %d.\r\n",read_data ,*read_data);
+			printf("The value at address %p is %p.\r\n",read_data ,*read_data);
 			if (exception_flag != 0)
 			{
 			printf("Exception flag has been thrown due to an access request to a restricted area.\r\n");
@@ -151,6 +153,17 @@ void read(void)
 		}
 	}
 	return;
+}
+
+
+void disable_interrupts(void)
+{
+	__asm(
+			"mrs r3, CPSR\n"
+			"orr r3, #(0x80 | 0x40)\n"
+			"msr CPSR_c, r3\n"
+			: :
+			);
 }
 
 void write(void)
@@ -167,7 +180,7 @@ void write(void)
 		{
 			write_data = (unsigned int *) *user_address;
 			*write_data = *user_data; //Dereferences the pointer with the value entered
-			printf("You have written %d to location %p.\r\n", *write_data, write_data);
+			printf("You have written %p to location %p.\r\n", *write_data, write_data);
 			if (exception_flag != 0)
 			{
 			printf("Exception flag has been thrown due to an access request to a restricted area.\r\n");

@@ -35,4 +35,5 @@ ALT_STATUS_CODE f2h_bridge_enable(void);
 void read(void);
 void write(void);
 void rule_test(void);
+void disable_interrupts();
 #endif
