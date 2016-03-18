@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <inttypes.h>
+#include <string.h>
 #include "socal/hps.h"
 #include "socal/socal.h"
 #include "socal/alt_sdr.h"
@@ -31,9 +32,16 @@ static volatile uint32_t rule_1_rule_number = 1;
 //Error handling variable
 volatile unsigned int exception_flag;
 
+extern void *__cs3_interrupt_vector;
+
+void *__arm_vector_table = (void*)0xffff0000;
+
 int main()
 {
 	ALT_STATUS_CODE status = ALT_E_SUCCESS;   	
+	
+	//Copies the exception table from SDRAM into the correct location of OCRAM
+	memcpy(__arm_vector_table, &__cs3_interrupt_vector, ARM_VECTOR_TABLE_SIZE);
 
 	printf("Welcome to the memory protection rule test program!\r\n");
 	printf("The F2H bridge is being enabled...\r\n");

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolkit
+        name="hps_sdram_protection"
+        displayName="HPS SDRAM Memory Protection Toolkit"
+        addMenuItem="true"
+        >
+        <file>hps_sdram_protection.tcl</file>
+		<icon>cv_soc.png</icon>
+		<description>The HPS SDRAM memory protection toolkit allows the user to confirm the functionality of their memory protection rules.</description>
+</toolkit>

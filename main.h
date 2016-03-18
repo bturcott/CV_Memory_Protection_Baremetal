@@ -21,6 +21,9 @@
 #define SOCFPGA_RSTMGR_ADDRESS 		0xFFD05000
 #define RSTMGR_BRGMODRST_ADDRESS	(SOCFPGA_RSTMGR_ADDRESS + 0x01C)
 
+//Required for Interrupt Vector
+#define ARM_VECTOR_TABLE_SIZE  128
+
 typedef struct
 {
 	unsigned int hps2fpga_val;
