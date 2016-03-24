@@ -4,8 +4,7 @@ namespace eval Test {
 	variable Switch_off 1
 
 	proc toggle { position } {
-		set ::Test::ledValue ${position}
-		::Test::updateDashboard
+		set ::Test::updateDashboard
 	}
 
 	proc claimMaster {} {
@@ -23,8 +22,7 @@ namespace eval Test {
 
 		set addr [toolkit_get_property AddressInput1 text]
 		set data [toolkit_get_property DataInput1 text]
-		#puts stdout $addr
-		#puts stdout $data
+
 
 		set rd [master_write_32 $claim_path $addr $data]
 	}
@@ -35,8 +33,7 @@ namespace eval Test {
 
 		set addr1 [toolkit_get_property AddressInput text]
 		set data1 [toolkit_get_property DataInput text]
-		#puts stdout $addr
-		#puts stdout $data
+
 
 		set rd [master_write_memory $claim_path $addr1 $data1]
 	}
@@ -77,8 +74,6 @@ namespace eval Test {
 		toolkit_add topGroup group self
 		toolkit_set_property topGroup expandableX false
 		toolkit_set_property topGroup expandableY false
-		toolkit_set_property topGroup preferredWidth 1250
-		toolkit_set_property topGroup preferredHeight 750
 		toolkit_set_property topGroup itemsPerRow 1
 		toolkit_set_property topGroup title "HPS SDRAM"
 		#
@@ -87,7 +82,7 @@ namespace eval Test {
 		toolkit_add jtagavmmGroup group topGroup
 		toolkit_set_property jtagavmmGroup expandableX false
 		toolkit_set_property jtagavmmGroup expandableY false
-		toolkit_set_property jtagavmmGroup preferredWidth 1000
+		toolkit_set_property jtagavmmGroup preferredWidth 1250
 		toolkit_set_property jtagavmmGroup preferredHeight 100
 		toolkit_set_property jtagavmmGroup itemsPerRow 2
 		toolkit_set_property jtagavmmGroup title "JTAG Avalon Master"
@@ -107,6 +102,7 @@ namespace eval Test {
 		toolkit_add ReadGroup group CommandGroup
 		toolkit_set_property ReadGroup expandableX false
 		toolkit_set_property ReadGroup expandableY false
+		toolkit_set_property ReadGroup preferredHeight 10
 		toolkit_set_property ReadGroup itemsPerRow 5
 		toolkit_set_property ReadGroup title "Read Command"
 		#
@@ -131,7 +127,7 @@ namespace eval Test {
 		toolkit_add MasterPathText text jtagavmmGroup
 		toolkit_set_property MasterPathText expandableX false
 		toolkit_set_property MasterPathText expandableY false
-		toolkit_set_property MasterPathText preferredWidth 900
+		toolkit_set_property MasterPathText preferredWidth 1150
 		toolkit_set_property MasterPathText preferredHeight 50
 		toolkit_set_property MasterPathText editable false
 		toolkit_set_property MasterPathText htmlCapable false
@@ -270,93 +266,7 @@ namespace eval Test {
 		toolkit_set_property DataInput1 htmlCapable false
 		toolkit_set_property DataInput1 text "0x0"
 
-		#
-		# sendText widgets
-		#
-		#toolkit_add sendTextGroup group topGroup
-		#toolkit_set_property sendTextGroup expandableX false
-		#toolkit_set_property sendTextGroup expandableY false
-		#toolkit_set_property sendTextGroup itemsPerRow 1
-		#toolkit_set_property sendTextGroup title "Send Data"
-
-		#toolkit_add sendTextText text sendTextGroup
-		#toolkit_set_property sendTextText expandableX false
-		#toolkit_set_property sendTextText expandableY false
-		#toolkit_set_property sendTextText preferredWidth 200
-		#toolkit_set_property sendTextText preferredHeight 200
-		#toolkit_set_property sendTextText editable true
-		#toolkit_set_property sendTextText htmlCapable false
-		#toolkit_set_property sendTextText text ""
-
-		#toolkit_add sendTextButton button sendTextGroup
-		#toolkit_set_property sendTextButton enabled true
-		#toolkit_set_property sendTextButton expandableY false
-		#toolkit_set_property sendTextButton expandableY false
-		#toolkit_set_property sendTextButton text "Send Now"
-		#toolkit_set_property sendTextButton onClick {::Test::sendText}
-		#
-		# receiveText widgets
-		#
-		toolkit_add receiveTextGroup group topGroup
-		toolkit_set_property receiveTextGroup expandableX false
-		toolkit_set_property receiveTextGroup expandableY false
-		toolkit_set_property receiveTextGroup itemsPerRow 1
-		toolkit_set_property receiveTextGroup title "RAM Contents"
-				
-		toolkit_add BlockReadButton button receiveTextGroup
-		toolkit_set_property BlockReadButton enabled true
-		toolkit_set_property BlockReadButton expandableY false
-		toolkit_set_property BlockReadButton expandableY false
-		toolkit_set_property BlockReadButton text "Block Read"
-		toolkit_set_property BlockReadButton onClick {::Test::blockReadSDRAM}
-
-		toolkit_add AddressRangeText text receiveTextGroup
-		toolkit_set_property AddressRangeText expandableX false
-		toolkit_set_property AddressRangeText expandableY false
-		toolkit_set_property AddressRangeText preferredWidth 130
-		toolkit_set_property AddressRangeText preferredHeight 60
-		toolkit_set_property AddressRangeText editable false
-		toolkit_set_property AddressRangeText htmlCapable false
-		toolkit_set_property AddressRangeText text " Size of block read"
-
-		toolkit_add AddressRangeInput text receiveTextGroup
-		toolkit_set_property AddressRangeInput expandableX false
-		toolkit_set_property AddressRangeInput expandableY false
-		toolkit_set_property AddressRangeInput preferredWidth 50
-		toolkit_set_property AddressRangeInput preferredHeight 60
-		toolkit_set_property AddressRangeInput editable yes
-		toolkit_set_property AddressRangeInput htmlCapable false
-		toolkit_set_property AddressRangeInput text ""
-		
-		toolkit_add receiveTextText text receiveTextGroup
-		toolkit_set_property receiveTextText expandableX false
-		toolkit_set_property receiveTextText expandableY false
-		toolkit_set_property receiveTextText preferredWidth 310
-		toolkit_set_property receiveTextText preferredHeight 300
-		toolkit_set_property receiveTextText editable false
-		toolkit_set_property receiveTextText htmlCapable false
-		toolkit_set_property receiveTextText text ""
 		return -code ok
-	}
-
-
-	proc updateDashboard {} {
-		if { ${::Test::dashboardActive} > 0 } {
-			toolkit_set_property WriteGroup title "Write Command"
-			if { [ expr ${::Test::ledValue} & 0x01 & ${::Test::Switch_off} ] } {
-			toolkit_set_property led0LED color "green"
-
-		set ::Test::Switch_off 0
-			} else {
-			toolkit_set_property led0LED color "green_off"
-		set ::Test::Switch_off 1
-			}
-			if { [ expr ${::Test::ledValue} & 0x02 ] } {
-			toolkit_set_property led1LED color "green"
-			} else {
-			toolkit_set_property led1LED color "green_off"
-			}
-		}
 	}
 }
 ::Test::dashBoard
