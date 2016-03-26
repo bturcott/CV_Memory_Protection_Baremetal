@@ -82,8 +82,8 @@ namespace eval Test {
 		toolkit_add jtagavmmGroup group topGroup
 		toolkit_set_property jtagavmmGroup expandableX false
 		toolkit_set_property jtagavmmGroup expandableY false
-		toolkit_set_property jtagavmmGroup preferredWidth 1250
-		toolkit_set_property jtagavmmGroup preferredHeight 100
+		#toolkit_set_property jtagavmmGroup preferredWidth 1250
+		#toolkit_set_property jtagavmmGroup preferredHeight 100
 		toolkit_set_property jtagavmmGroup itemsPerRow 2
 		toolkit_set_property jtagavmmGroup title "JTAG Avalon Master"
 		#
@@ -92,9 +92,9 @@ namespace eval Test {
 		toolkit_add CommandGroup group topGroup
 		toolkit_set_property CommandGroup expandableX false
 		toolkit_set_property CommandGroup expandableY false
-		toolkit_set_property CommandGroup preferredWidth 1250
+		#toolkit_set_property CommandGroup preferredWidth 1250
 		toolkit_set_property CommandGroup preferredHeight 100
-		toolkit_set_property CommandGroup itemsPerRow 2
+		toolkit_set_property CommandGroup itemsPerRow 1
 		toolkit_set_property CommandGroup title "Command Functions"
 		#
 		# Read group widget
@@ -102,6 +102,7 @@ namespace eval Test {
 		toolkit_add ReadGroup group CommandGroup
 		toolkit_set_property ReadGroup expandableX false
 		toolkit_set_property ReadGroup expandableY false
+		toolkit_set_property ReadGroup preferredWidth 625
 		toolkit_set_property ReadGroup preferredHeight 10
 		toolkit_set_property ReadGroup itemsPerRow 5
 		toolkit_set_property ReadGroup title "Read Command"
@@ -127,8 +128,8 @@ namespace eval Test {
 		toolkit_add MasterPathText text jtagavmmGroup
 		toolkit_set_property MasterPathText expandableX false
 		toolkit_set_property MasterPathText expandableY false
-		toolkit_set_property MasterPathText preferredWidth 1150
-		toolkit_set_property MasterPathText preferredHeight 50
+		toolkit_set_property MasterPathText preferredWidth 525
+		toolkit_set_property MasterPathText preferredHeight 30
 		toolkit_set_property MasterPathText editable false
 		toolkit_set_property MasterPathText htmlCapable false
 		toolkit_set_property MasterPathText text ""
@@ -155,7 +156,7 @@ namespace eval Test {
 		toolkit_add ReadAddressInput text ReadGroup
 		toolkit_set_property ReadAddressInput expandableX false
 		toolkit_set_property ReadAddressInput expandableY false
-		toolkit_set_property ReadAddressInput preferredWidth 120
+		toolkit_set_property ReadAddressInput preferredWidth 150
 		toolkit_set_property ReadAddressInput preferredHeight 100
 		toolkit_set_property ReadAddressInput editable yes
 		toolkit_set_property ReadAddressInput htmlCapable false
